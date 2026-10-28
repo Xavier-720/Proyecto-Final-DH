@@ -14,7 +14,6 @@
   z-index: 1000;
 }
 
-/* claro */
 .navbar.light {
   background-color: #fdfbf7;
   color: #3d2314;
@@ -29,7 +28,6 @@
   color: #8c6d53;
 }
 
-/* oscuro */
 .navbar.dark {
   background-color: #120e0c;
   color: #f3ece4;
@@ -44,7 +42,6 @@
   color: #a68a71;
 }
 
-/* brand */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -73,7 +70,6 @@
   font-weight: 400;
 }
 
-/* links */
 .navbar-links {
   display: flex;
   gap: 1.5rem;
@@ -94,7 +90,6 @@
   color: #d97736;
 }
 
-/* botones derecha */
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -137,7 +132,6 @@
   background-color: #542d13;
 }
 
-/* toggle modo */
 .theme-toggle-btn.modern-toggle {
   background: transparent;
   border: none;

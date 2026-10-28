@@ -13,14 +13,14 @@ function Navbar({ darkMode, setDarkMode }) {
         </div>
       </a>
       
-      {/* menu */}
+      {/* links */}
       <nav className="navbar-links">
         <a href="#hoteles">Hoteles</a>
         <a href="#habitaciones">Habitaciones</a>
         <a href="#reservas">Mis Reservas</a>
       </nav>
 
-      {/* tema */}
+      {/* botones y tema */}
       <div className="navbar-actions">
         <div className="auth-buttons">
           <button className="auth-btn outline" onClick={() => alert('falta login')}>Iniciar sesión</button>
@@ -30,10 +30,9 @@ function Navbar({ darkMode, setDarkMode }) {
         <button 
           className="theme-toggle-btn modern-toggle" 
           onClick={() => setDarkMode(!darkMode)}
-          aria-label="Cambiar tema"
+          aria-label="cambiar tema"
         >
           {darkMode ? (
-            /* sol claro */
             <svg className="theme-icon sun" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="4"></circle>
               <path d="M12 2v2"></path>
@@ -46,7 +45,6 @@ function Navbar({ darkMode, setDarkMode }) {
               <path d="m19.07 4.93-1.41 1.41"></path>
             </svg>
           ) : (
-            /* luna oscura */
             <svg className="theme-icon moon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>

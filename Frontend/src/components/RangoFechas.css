@@ -19,10 +19,19 @@
   color: inherit;
   font-size: 1.2rem;
   cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .rf-nav button:hover {
   background-color: rgba(111, 60, 27, 0.1);
+}
+
+.dark-mode .rf-nav button {
+  border-color: #475569;
+}
+
+.dark-mode .rf-nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .rf-meses {
@@ -34,6 +43,11 @@
   padding: 1.2rem;
   border-radius: 8px;
   border: 1px solid rgba(111, 60, 27, 0.1);
+}
+
+.dark-mode .rf-meses {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #334155;
 }
 
 .rf-mes {
@@ -69,6 +83,7 @@
   color: inherit;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .rf-dia:disabled {
@@ -78,6 +93,11 @@
 
 .rf-dia.libre:hover:not(:disabled) {
   background: rgba(111, 60, 27, 0.2);
+}
+
+.dark-mode .rf-dia.libre:hover:not(:disabled) {
+  background: rgba(129, 140, 248, 0.25);
+  color: #f8fafc;
 }
 
 .rf-dia.pasado {
@@ -97,8 +117,18 @@
   background: rgba(111, 60, 27, 0.25);
 }
 
+.dark-mode .rf-dia.en-rango {
+  background: rgba(129, 140, 248, 0.3);
+  color: #fff;
+}
+
 .rf-dia.elegido {
   background: #4a2810;
+  color: #fff;
+}
+
+.dark-mode .rf-dia.elegido {
+  background: #6f3c1b;
   color: #fff;
 }
 
@@ -106,6 +136,11 @@
 .rf-lectura .rf-dia.libre {
   background: rgba(40, 167, 69, 0.15);
   color: #1e7e34;
+}
+
+.dark-mode .rf-lectura .rf-dia.libre {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
 }
 
 .rf-leyenda {

@@ -1,0 +1,61 @@
+/* Estilos generales del pie de página */
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  background-color: #f5ebe0;
+  border-top: 1px solid #e6d7cc;
+  box-sizing: border-box;
+  margin-top: auto;
+}
+
+/* Colores para el modo oscuro */
+.dark-footer {
+  background-color: #1a1614;
+  border-top: 1px solid #332924;
+  color: #f0e6df;
+}
+
+/* Datos de la marca a la izquierda */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.footer-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.footer-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2b1810;
+}
+
+.dark-footer .footer-title {
+  color: #f0e6df;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* Texto de la derecha */
+.footer-info {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+.footer-logo-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: contain;
+}

@@ -1,0 +1,29 @@
+# === FRONTEND ===
+Frontend/node_modules/
+Frontend/dist/
+Frontend/dist-ssr/
+Frontend/build/
+Frontend/*.local
+Frontend/.env
+Frontend/.env.local
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+Frontend/pnpm-debug.log*
+
+# === BACKEND (Java / Maven) ===
+Backend/target/
+Backend/.mvn/
+Backend/mvnw
+Backend/mvnw.cmd
+Backend/.classpath
+Backend/.project
+Backend/.settings/
+
+# === EDITOR Y SISTEMA ===
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.user

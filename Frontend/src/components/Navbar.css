@@ -1,0 +1,295 @@
+/* ==========================================
+   BARRA DE NAVEGACIÓN
+   ========================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 195px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: #483025;
+  border-bottom: 1px solid #634335;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.navbar.light-navbar,
+.navbar.dark-navbar {
+  background-color: #483025;
+  border-bottom: 1px solid #634335;
+  color: #ffffff;
+}
+
+/* ==========================================
+   LOGO Y TÍTULO (Logo gigante de 165px)
+   ========================================== */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+  height: 100%;
+}
+
+.navbar-logo-img {
+  width: 165px !important;
+  height: 165px !important;
+  min-width: 165px !important;
+  min-height: 165px !important;
+  max-width: 165px !important;
+  max-height: 165px !important;
+  object-fit: contain !important;
+  border-radius: 50% !important;
+  display: block;
+  background: transparent !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.navbar-logo-img:hover {
+  transform: scale(1.03);
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-title {
+  font-weight: 800;
+  font-size: 3rem !important;
+  color: #ffffff !important;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+
+.logo-subtitle {
+  font-size: 1.2rem;
+  color: #f5ebe0;
+  opacity: 0.9;
+  margin-top: 0.35rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* ==========================================
+   PANEL DERECHO Y ACCIONES
+   ========================================== */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.user-control-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-toggle-circle {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+  padding: 0 !important;
+  flex-shrink: 0;
+}
+
+.theme-toggle-circle:hover {
+  transform: scale(1.15);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background-color: #6f3c1b;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: 1px solid #8c5332;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.user-greeting {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #ffffff !important;
+  white-space: nowrap;
+}
+
+.auth-container-flex {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.btn-register, .btn-login {
+  padding: 0.65rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-register {
+  background: transparent;
+  border: 1px solid #ffb07c;
+  color: #ffb07c;
+}
+
+.btn-register:hover {
+  background-color: #ffb07c;
+  color: #483025;
+}
+
+.btn-login {
+  background-color: #6f3c1b;
+  border: 1px solid #8c5332;
+  color: #ffffff;
+}
+
+.btn-login:hover {
+  background-color: #542d13;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #ff9999;
+  color: #ffcccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background-color: #d9534f;
+  color: #ffffff;
+  border-color: #d9534f;
+}
+
+.btn-nav {
+  color: #ffffff;
+  border: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-nav:hover {
+  transform: translateY(-1px);
+}
+
+.btn-favorites {
+  background-color: #a8325a;
+}
+
+.btn-favorites:hover {
+  background-color: #8a2849;
+}
+
+.btn-my-bookings {
+  background-color: #6f3c1b;
+  border: 1px solid #8c5332;
+}
+
+.btn-my-bookings:hover {
+  background-color: #542d13;
+}
+
+.btn-admin-panel {
+  background-color: #e67e22;
+}
+
+.btn-admin-panel:hover {
+  background-color: #c96a15;
+}
+
+/* tablet y celular: el header se achica y los botones bajan de linea */
+@media (max-width: 900px) {
+  .navbar {
+    height: auto;
+    min-height: 110px;
+    flex-wrap: wrap;
+    padding: 0.6rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .navbar-logo {
+    gap: 0.8rem;
+  }
+
+  .navbar-logo-img {
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
+  }
+
+  .logo-title {
+    font-size: 1.5rem !important;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .user-control-group {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}

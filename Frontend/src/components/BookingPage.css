@@ -1,0 +1,158 @@
+.booking-container {
+  width: 100%;
+  max-width: 950px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.booking-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1.5px solid rgba(140, 67, 29, 0.15);
+  padding-bottom: 1rem;
+}
+
+.booking-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: inherit;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booking-product-summary {
+  background: rgba(111, 60, 27, 0.03);
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 60, 27, 0.1);
+}
+
+.booking-product-summary img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin: 0.8rem 0;
+}
+
+.booking-product-summary h4 {
+  margin: 0.4rem 0;
+  font-size: 1.1rem;
+}
+
+.summary-city, .summary-category {
+  font-size: 0.85rem;
+  margin: 0.2rem 0;
+  opacity: 0.85;
+}
+
+.summary-desc {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-top: 0.6rem;
+  opacity: 0.75;
+}
+
+.booking-form-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.user-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.booking-form-section input {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.booking-form-section input:disabled {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: not-allowed;
+}
+
+.booking-error-msg {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+
+.btn-confirm-booking {
+  width: 100%;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn-confirm-booking:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.btn-confirm-booking:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-success-card {
+  text-align: center;
+  padding: 2rem;
+}
+
+.success-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.summary-box {
+  background: rgba(40, 167, 69, 0.08);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  padding: 1.2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 1.5rem auto;
+  text-align: left;
+}
+
+.summary-box p {
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}

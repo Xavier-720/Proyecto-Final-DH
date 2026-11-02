@@ -1,0 +1,151 @@
+.rf {
+  width: 100%;
+  text-align: left;
+}
+
+.rf-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.rf-nav button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.rf-nav button:hover {
+  background-color: rgba(111, 60, 27, 0.1);
+}
+
+.rf-meses {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: rgba(111, 60, 27, 0.03);
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 60, 27, 0.1);
+}
+
+.rf-mes {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+.rf-mes h4 {
+  margin: 0 0 0.8rem 0;
+  font-size: 1rem;
+}
+
+.rf-semana,
+.rf-dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.rf-semana span {
+  font-weight: 600;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 4px 0;
+}
+
+.rf-dia {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.rf-dia:disabled {
+  color: inherit;
+  cursor: default;
+}
+
+.rf-dia.libre:hover:not(:disabled) {
+  background: rgba(111, 60, 27, 0.2);
+}
+
+.rf-dia.pasado {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.rf-dia.ocupado {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  text-decoration: line-through;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.rf-dia.en-rango {
+  background: rgba(111, 60, 27, 0.25);
+}
+
+.rf-dia.elegido {
+  background: #4a2810;
+  color: #fff;
+}
+
+/* en la ficha del hotel los dias libres van en verde */
+.rf-lectura .rf-dia.libre {
+  background: rgba(40, 167, 69, 0.15);
+  color: #1e7e34;
+}
+
+.rf-leyenda {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.rf-leyenda span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.punto {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.punto.libre {
+  background-color: #28a745;
+}
+
+.punto.ocupado {
+  background-color: #dc3545;
+}
+
+.rf-resumen {
+  margin: 0.8rem 0 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.rf-aviso {
+  margin: 0.6rem 0 0 0;
+  color: #dc3545;
+  font-size: 0.85rem;
+  text-align: center;
+}

@@ -1,0 +1,48 @@
+.favorites-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.favorites-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.favorites-header h2 {
+  margin: 0;
+}
+
+.btn-back {
+  padding: 0.6rem 1.4rem;
+  background-color: #4a2810;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-back:hover {
+  background-color: #5d3314;
+}
+
+.favorites-empty-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.no-favorites {
+  text-align: center;
+  font-size: 1.1rem;
+  opacity: 0.8;
+}

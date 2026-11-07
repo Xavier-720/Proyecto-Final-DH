@@ -10,12 +10,17 @@ import java.util.List;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    // trae las caracteristicas junto con los hoteles para no hacer una consulta por cada uno
-    @Query("SELECT DISTINCT h FROM Hotel h LEFT JOIN FETCH h.caracteristicas")
-    List<Hotel> findAll();
+    // trae características y categoría junto con los hoteles para no hacer una consulta por cada uno
+    @Query("SELECT DISTINCT h FROM Hotel h LEFT JOIN FETCH h.caracteristicas LEFT JOIN FETCH h.categoria")
+    List<Hotel> findAllConDetalle();
 
     // para que no se repita el nombre (US#3)
     boolean existsByNombreIgnoreCase(String nombre);
 
     boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id);
+
+    // para no dejar borrar categorías o características que están en uso
+    boolean existsByCategoriaId(Long categoriaId);
+
+    boolean existsByCaracteristicasId(Long featureId);
 }

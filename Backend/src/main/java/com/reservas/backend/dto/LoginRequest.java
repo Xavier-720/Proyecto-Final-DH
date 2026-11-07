@@ -1,9 +1,13 @@
 package com.reservas.backend.dto;
 
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-public class LoginRequest {
-    private String email;
-    private String password;
-}
+public record LoginRequest(
+        @NotBlank(message = "El correo es obligatorio")
+        @Email(message = "El correo no tiene un formato válido")
+        String email,
+
+        @NotBlank(message = "La contraseña es obligatoria")
+        String password
+) {}

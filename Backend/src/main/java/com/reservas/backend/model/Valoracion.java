@@ -1,13 +1,19 @@
 package com.reservas.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+// un usuario puede valorar una sola vez cada hotel (restricción única en la base)
 @Entity
-@Table(name = "valoraciones")
-@Data
+@Table(name = "valoraciones",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "hotel_id"}))
+@Getter
+@Setter
+@NoArgsConstructor
 public class Valoracion {
 
     @Id
@@ -22,11 +28,11 @@ public class Valoracion {
 
     private LocalDate fecha;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 

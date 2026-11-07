@@ -2,11 +2,11 @@ import logo from '../assets/Anteiku_Stay_redondo.png';
 import './Footer.css';
 
 // US#7: footer con el isologotipo, el año y el copyright
-function Footer({ darkMode }) {
+function Footer() {
   const anio = new Date().getFullYear();
 
   return (
-    <footer className={`footer ${darkMode ? 'dark-footer' : ''}`}>
+    <footer className="footer">
       <div className="footer-brand">
         <div className="footer-logo-row">
           <img src={logo} alt="Anteiku Stay" className="footer-logo-img" />

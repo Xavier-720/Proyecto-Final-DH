@@ -7,6 +7,14 @@
     <title>Anteiku Stays</title>
   </head>
   <body>
+    <script>
+      // aplica el tema guardado antes de que cargue React, así no parpadea al recargar
+      try {
+        document.documentElement.className = localStorage.getItem('tema') === 'oscuro' ? 'dark-mode' : 'light-mode';
+      } catch (e) {
+        document.documentElement.className = 'light-mode';
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

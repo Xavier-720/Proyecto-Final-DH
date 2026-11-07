@@ -1,26 +1,44 @@
 package com.reservas.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "hoteles")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
+
     private String ciudad;
-    
+
     @Column(length = 1000)
     private String descripcion;
-    
-    private String categoria;
-    
+
     @Column(length = 1000)
     private String imagen;
+
+    // teléfono de contacto (solo números, con código de país) para el botón de WhatsApp
+    private String telefono;
+
+    // la categoría es una relación real con la tabla categorias
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -28,38 +46,13 @@ public class Hotel {
         joinColumns = @JoinColumn(name = "hotel_id"),
         inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
-    private Set<Feature> caracteristicas;
+    private Set<Feature> caracteristicas = new HashSet<>();
 
-    public Hotel() {}
+    // Relaciones bidireccionales: al borrar un hotel se borran también sus valoraciones y favoritos.
+    // Las reservas NO se borran en cascada: un hotel con reservas no se puede eliminar.
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Valoracion> valoraciones = new ArrayList<>();
 
-    public Hotel(Long id, String nombre, String ciudad, String descripcion, String categoria, String imagen, Set<Feature> caracteristicas) {
-        this.id = id;
-        this.nombre = nombre;
-        this.ciudad = ciudad;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-        this.imagen = imagen;
-        this.caracteristicas = caracteristicas;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getCiudad() { return ciudad; }
-    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-
-    public String getImagen() { return imagen; }
-    public void setImagen(String imagen) { this.imagen = imagen; }
-
-    public Set<Feature> getCaracteristicas() { return caracteristicas; }
-    public void setCaracteristicas(Set<Feature> caracteristicas) { this.caracteristicas = caracteristicas; }
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Favorito> favoritos = new ArrayList<>();
 }

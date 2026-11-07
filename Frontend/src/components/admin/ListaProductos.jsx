@@ -1,16 +1,28 @@
-import { API_URL, leerError } from '../../services/api';
+import useDatos from '../../hooks/useDatos';
+import useAvisos from '../../hooks/useAvisos';
+import { eliminarHotel } from '../../services/hotelService';
+import './Admin.css';
 
 // US#10 y US#11: lista de hoteles con editar y eliminar
-function ListaProductos({ hoteles, onEditHotel, onDeleteHotel }) {
-  const eliminar = (hotel) => {
-    if (!window.confirm(`¿Seguro que querés eliminar "${hotel.nombre}"?`)) return;
+function ListaProductos({ onEditHotel }) {
+  const { hoteles, quitarHotel } = useDatos();
+  const { mostrarToast, confirmar } = useAvisos();
 
-    fetch(`${API_URL}/hoteles/${hotel.id}`, { method: 'DELETE' })
-      .then(async (res) => {
-        if (!res.ok) throw new Error(await leerError(res, 'No se pudo eliminar el producto.'));
-        onDeleteHotel(hotel.id);
-      })
-      .catch((err) => alert(err.message));
+  const eliminar = async (hotel) => {
+    const acepto = await confirmar({
+      titulo: '¿Eliminar el producto?',
+      mensaje: `Vas a eliminar "${hotel.nombre}". Esta acción no se puede deshacer.`,
+      textoConfirmar: 'Eliminar',
+    });
+    if (!acepto) return;
+
+    try {
+      await eliminarHotel(hotel.id);
+      quitarHotel(hotel.id);
+      mostrarToast('Producto eliminado correctamente.');
+    } catch (err) {
+      mostrarToast(err.message, 'error');
+    }
   };
 
   return (
@@ -30,7 +42,7 @@ function ListaProductos({ hoteles, onEditHotel, onDeleteHotel }) {
             <tr key={hotel.id}>
               <td>{hotel.id}</td>
               <td>{hotel.nombre}</td>
-              <td><span className="category-badge">{hotel.categoria || 'Sin Categoría'}</span></td>
+              <td><span className="category-badge">{hotel.categoria?.titulo || 'Sin Categoría'}</span></td>
               <td className="table-actions">
                 <button className="edit-btn" onClick={() => onEditHotel(hotel)}>Editar</button>
                 <button className="delete-btn" onClick={() => eliminar(hotel)}>Eliminar</button>

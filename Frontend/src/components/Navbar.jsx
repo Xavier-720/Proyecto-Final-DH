@@ -1,21 +1,20 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+import useTema from '../hooks/useTema';
+import useDatos from '../hooks/useDatos';
+import useFavoritos from '../hooks/useFavoritos';
 import './Navbar.css';
 import logoNormalImg from '../assets/Anteiku_Stay_redondo.png';
 import logoEyesImg from '../assets/Anteiku_Stay_eyes.png';
 
-function Navbar({
-  darkMode,
-  setDarkMode,
-  onOpenRegister,
-  onOpenLogin,
-  usuarioLogueado,
-  onLogout,
-  onGoHome,
-  onOpenAdminPanel,
-  onOpenBookings,
-  onOpenFavorites,
-  cantidadFavoritos = 0,
-}) {
+function Navbar() {
+  const { usuario, esAdmin, logout, abrirLogin, abrirRegistro } = useAuth();
+  const { darkMode, alternarTema } = useTema();
+  const { limpiarFiltros } = useDatos();
+  const { favoritos } = useFavoritos();
+  const navigate = useNavigate();
+
   const [currentLogo, setCurrentLogo] = useState(logoNormalImg);
 
   const obtenerIniciales = (nombreCompleto) => {
@@ -27,11 +26,25 @@ function Navbar({
     return partes[0].substring(0, 2).toUpperCase();
   };
 
-  const iniciales = obtenerIniciales(usuarioLogueado?.nombre);
+  const irAlInicio = () => {
+    limpiarFiltros();
+    navigate('/');
+  };
+
+  const cerrarSesion = () => {
+    logout();
+    navigate('/');
+  };
+
+  const botonTema = (
+    <button className="theme-toggle-circle" onClick={alternarTema} title="Cambiar tema">
+      {darkMode ? '☀️' : '🌙'}
+    </button>
+  );
 
   return (
-    <header className={`navbar ${darkMode ? 'dark-navbar' : 'light-navbar'}`}>
-      <div className="navbar-logo" onClick={onGoHome} title="Ir a la página principal">
+    <header className="navbar">
+      <div className="navbar-logo" onClick={irAlInicio} title="Ir a la página principal">
         <img
           src={currentLogo}
           alt="Anteiku Stay Logo"
@@ -46,49 +59,37 @@ function Navbar({
       </div>
 
       <div className="navbar-actions">
-        {usuarioLogueado ? (
+        {usuario ? (
           <div className="user-control-group">
-            <button
-              className="theme-toggle-circle"
-              onClick={() => setDarkMode(!darkMode)}
-              title="Cambiar tema"
-            >
-              {darkMode ? '☀️' : '🌙'}
-            </button>
+            {botonTema}
 
             <div className="user-profile-pill">
-              <div className="user-avatar" title={usuarioLogueado.email}>{iniciales}</div>
-              <span className="user-greeting">Hola, {usuarioLogueado.nombre.split(' ')[0]}</span>
+              <div className="user-avatar" title={usuario.email}>{obtenerIniciales(usuario.nombre)}</div>
+              <span className="user-greeting">Hola, {usuario.nombre.split(' ')[0]}</span>
             </div>
 
-            <button className="btn-nav btn-favorites" onClick={onOpenFavorites}>
-              ❤️ Favoritos ({cantidadFavoritos})
-            </button>
+            <Link className="btn-nav btn-favorites" to="/favoritos">
+              ❤️ Favoritos ({favoritos.length})
+            </Link>
 
-            <button className="btn-nav btn-my-bookings" onClick={onOpenBookings}>
+            <Link className="btn-nav btn-my-bookings" to="/mis-reservas">
               📅 Mis Reservas
-            </button>
+            </Link>
 
-            {usuarioLogueado.rol === 'ADMIN' && (
-              <button className="btn-nav btn-admin-panel" onClick={onOpenAdminPanel}>
+            {esAdmin && (
+              <Link className="btn-nav btn-admin-panel" to="/admin">
                 ⚙️ Panel Admin
-              </button>
+              </Link>
             )}
 
-            <button className="btn-logout" onClick={onLogout}>Cerrar sesión</button>
+            <button className="btn-logout" onClick={cerrarSesion}>Cerrar sesión</button>
           </div>
         ) : (
           <div className="auth-container-flex">
-            <button
-              className="theme-toggle-circle"
-              onClick={() => setDarkMode(!darkMode)}
-              title="Cambiar tema"
-            >
-              {darkMode ? '☀️' : '🌙'}
-            </button>
+            {botonTema}
             <div className="auth-buttons">
-              <button className="btn-register" onClick={onOpenRegister}>Crear cuenta</button>
-              <button className="btn-login" onClick={onOpenLogin}>Iniciar sesión</button>
+              <button className="btn-register" onClick={abrirRegistro}>Crear cuenta</button>
+              <button className="btn-login" onClick={() => abrirLogin()}>Iniciar sesión</button>
             </div>
           </div>
         )}

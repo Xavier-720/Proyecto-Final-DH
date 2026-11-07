@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+
+    boolean existsByTituloIgnoreCase(String titulo);
 }

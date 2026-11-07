@@ -16,6 +16,15 @@ function RangoFechas({ inicio = '', fin = '', onChange, ocupadas = [], soloLectu
 
   const cambiarMes = (cantidad) => setMes(new Date(mes.getFullYear(), mes.getMonth() + cantidad, 1));
 
+  // Las fechas ocupadas son las NOCHES reservadas (el día de check-out de otra reserva queda libre).
+  // Las fechas son texto yyyy-MM-dd, se pueden comparar directamente.
+  // Un rango es válido si ninguna de sus noches (desde el check-in hasta el día anterior al check-out) está ocupada.
+  const hayNocheOcupada = (desde, hasta) => ocupadas.some((o) => o >= desde && o < hasta);
+
+  // un día ocupado igual se puede elegir como check-out si todas las noches anteriores están libres
+  const esperandoSalida = inicio && !fin;
+  const puedeSerSalida = (fecha) => esperandoSalida && fecha > inicio && !hayNocheOcupada(inicio, fecha);
+
   const elegirDia = (fecha) => {
     setAviso('');
 
@@ -25,8 +34,7 @@ function RangoFechas({ inicio = '', fin = '', onChange, ocupadas = [], soloLectu
       return;
     }
 
-    // el rango no puede tener dias ocupados (las fechas son texto yyyy-MM-dd, se pueden comparar asi)
-    if (ocupadas.some((o) => o >= inicio && o <= fecha)) {
+    if (hayNocheOcupada(inicio, fecha)) {
       setAviso('Ese rango incluye días ocupados, elegí otras fechas.');
       onChange(fecha, '');
       return;
@@ -60,7 +68,7 @@ function RangoFechas({ inicio = '', fin = '', onChange, ocupadas = [], soloLectu
           type="button"
           key={fecha}
           className={clase}
-          disabled={ocupado || pasado || soloLectura}
+          disabled={(ocupado && !puedeSerSalida(fecha)) || pasado || soloLectura}
           onClick={() => elegirDia(fecha)}
         >
           {dia}

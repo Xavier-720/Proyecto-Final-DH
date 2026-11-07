@@ -3,12 +3,17 @@ package com.reservas.backend;
 import com.reservas.backend.model.Categoria;
 import com.reservas.backend.model.Feature;
 import com.reservas.backend.model.Hotel;
+import com.reservas.backend.model.Usuario;
 import com.reservas.backend.repository.CategoriaRepository;
 import com.reservas.backend.repository.FeatureRepository;
 import com.reservas.backend.repository.HotelRepository;
+import com.reservas.backend.repository.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+@Slf4j
 @Configuration
 public class DataInitializer {
 
@@ -23,9 +29,26 @@ public class DataInitializer {
     CommandLineRunner initData(
             HotelRepository hotelRepo,
             FeatureRepository featureRepo,
-            CategoriaRepository categoriaRepo
+            CategoriaRepository categoriaRepo,
+            UsuarioRepository usuarioRepo,
+            PasswordEncoder passwordEncoder,
+            @Value("${app.admin.email}") String adminEmail,
+            @Value("${app.admin.password}") String adminPassword
     ) {
         return args -> {
+            // El primer administrador se crea desde variables de entorno (ADMIN_EMAIL y ADMIN_PASSWORD).
+            // Ya no se asigna el rol por el contenido del correo.
+            if (!adminEmail.isBlank() && !adminPassword.isBlank()
+                    && !usuarioRepo.existsByEmail(adminEmail.trim().toLowerCase())) {
+                Usuario admin = new Usuario();
+                admin.setNombre("Administrador");
+                admin.setEmail(adminEmail.trim().toLowerCase());
+                admin.setPassword(passwordEncoder.encode(adminPassword));
+                admin.setRol(Usuario.Rol.ADMIN);
+                usuarioRepo.save(admin);
+                log.info("Usuario administrador inicial creado: {}", admin.getEmail());
+            }
+
             if (categoriaRepo.count() == 0) {
                 categoriaRepo.saveAll(List.of(
                     new Categoria(null, "Café & Descanso", "Espacios acogedores con aroma a café y máxima tranquilidad.", "https://images.unsplash.com/photo-1554118811-1e0d58224f24"),
@@ -51,11 +74,12 @@ public class DataInitializer {
             }
 
             if (hotelRepo.count() == 0) {
-                System.out.println(">>> Generando 410 hoteles...");
+                log.info("Generando 410 hoteles de prueba...");
                 List<Feature> featuresDisponibles = featureRepo.findAll();
 
                 String[] ciudades = {"Madrid", "Barcelona", "Buenos Aires", "Paris", "Berlin", "Roma", "Tokio", "Bogota", "Santiago", "Lima", "Londres", "New York", "Sidney", "Amsterdam", "Lisboa"};
-                String[] nombresCategorias = {"Café & Descanso", "Nocturnas", "Clásicos", "Románticos", "Aventura", "Lujo & Confort"};
+                // las categorías ya están guardadas, se asignan por referencia (relación real)
+                List<Categoria> categoriasDisponibles = categoriaRepo.findAll();
 
                 String[] imagenesHotel = {
                     "https://images.unsplash.com/photo-1566073771259-6a8506099945",
@@ -84,7 +108,7 @@ public class DataInitializer {
 
                 for (int i = 1; i <= 410; i++) {
                     String ciudad = ciudades[random.nextInt(ciudades.length)];
-                    String categoria = nombresCategorias[random.nextInt(nombresCategorias.length)];
+                    Categoria categoria = categoriasDisponibles.get(random.nextInt(categoriasDisponibles.size()));
                     String imagen = imagenesHotel[random.nextInt(imagenesHotel.length)];
 
                     // entre 2 y 5 caracteristicas distintas por hotel
@@ -96,20 +120,18 @@ public class DataInitializer {
                         caracteristicasAsignadas.add(fRandom);
                     }
 
-                    Hotel hotel = new Hotel(
-                        null,
-                        "Grand Hotel " + i + " " + ciudad,
-                        ciudad,
-                        "Magnífico establecimiento hotelero número " + i + " situado en una zona privilegiada de " + ciudad + ", ideal para disfrutar al máximo.",
-                        categoria,
-                        imagen,
-                        caracteristicasAsignadas
-                    );
+                    Hotel hotel = new Hotel();
+                    hotel.setNombre("Grand Hotel " + i + " " + ciudad);
+                    hotel.setCiudad(ciudad);
+                    hotel.setDescripcion("Magnífico establecimiento hotelero número " + i + " situado en una zona privilegiada de " + ciudad + ", ideal para disfrutar al máximo.");
+                    hotel.setCategoria(categoria);
+                    hotel.setImagen(imagen);
+                    hotel.setCaracteristicas(caracteristicasAsignadas);
                     listaHoteles.add(hotel);
                 }
 
                 hotelRepo.saveAll(listaHoteles);
-                System.out.println(">>> Listo, 410 hoteles creados");
+                log.info("Listo, 410 hoteles creados");
             }
         };
     }

@@ -1,0 +1,239 @@
+/* Estilos que usan varias pantallas: tarjetas con tema, botones y grilla de hoteles */
+.light-mode .btn-alta,
+.light-mode .back-btn-clean,
+.light-mode .page-btn {
+  background-color: #4a2810;
+  color: white;
+  border: none;
+}
+
+.light-mode .btn-alta:hover,
+.light-mode .back-btn-clean:hover,
+.light-mode .page-btn:hover:not(:disabled) {
+  background-color: #5d3314;
+}
+
+.dark-mode .btn-alta,
+.dark-mode .back-btn-clean,
+.dark-mode .page-btn {
+  background-color: #6f3c1b;
+  color: white;
+  border: 1px solid #8c4b22;
+}
+
+.dark-mode .btn-alta:hover,
+.dark-mode .back-btn-clean:hover,
+.dark-mode .page-btn:hover:not(:disabled) {
+  background-color: #562e14;
+}
+
+.btn-alta {
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-alta:hover {
+  transform: translateY(-1px);
+}
+
+.back-btn-clean {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #4a2810;
+  color: #fff;
+  border: none;
+}
+
+.back-btn-clean:hover {
+  background-color: #5d3314;
+}
+
+/* --- Tarjetas de hoteles --- */
+.hotels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.8rem;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 650px) {
+  .hotels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+:where(.light-mode) .tema-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e6dace !important;
+  color: #2c1a0e !important;
+}
+
+:where(.dark-mode) .tema-card {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #ffffff !important;
+}
+
+.hotel-city {
+  margin: 0 0 0.6rem 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.acceso-restringido {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+/* los links (react-router) que se ven como botones */
+a.btn-alta,
+a.back-btn-clean,
+a.btn-back,
+a.booking-view-btn,
+a.btn-confirm-booking,
+a.back-btn-mobile,
+a.btn-nav,
+a.menu-card {
+  text-decoration: none;
+}
+
+a.btn-alta,
+a.back-btn-clean,
+a.btn-back,
+a.booking-view-btn,
+a.btn-confirm-booking,
+a.back-btn-mobile {
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+a.menu-card {
+  display: block;
+  color: inherit;
+}
+
+/* tarjeta de "acceso restringido", "no encontrado", etc. */
+.acceso-restringido .back-btn-clean {
+  margin-top: 1rem;
+}
+
+.back-arrow-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.back-arrow-btn:hover {
+  transform: scale(1.08);
+  background-color: rgba(111, 60, 27, 0.1);
+}
+
+.policies-main-title {
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.btn-close-share {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: inherit;
+  width: 100%;
+}
+
+.action-btn {
+  background-color: #6f3c1b;
+  color: #ffffff !important;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.action-btn:hover {
+  background-color: #542d13;
+}
+
+.delete-btn {
+  background-color: #c93b2b;
+  color: #ffffff !important;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #a32d20;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.select-category {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+.modal-error {
+  color: #d9534f;
+  background: #ffe6e6;
+  padding: 0.55rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}

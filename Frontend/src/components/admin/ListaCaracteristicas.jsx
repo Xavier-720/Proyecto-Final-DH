@@ -1,57 +1,72 @@
-import { useState, useEffect } from 'react';
-import '../Modal.css';
-
-import { API_URL, leerError } from '../../services/api';
+import { useState } from 'react';
+import Modal from '../Modal';
+import useDatos from '../../hooks/useDatos';
+import useAvisos from '../../hooks/useAvisos';
+import {
+  crearCaracteristica,
+  editarCaracteristica,
+  eliminarCaracteristica,
+} from '../../services/caracteristicaService';
+import './Admin.css';
 
 // US#17: añadir, editar y eliminar caracteristicas
-function ListaCaracteristicas({ darkMode }) {
-  const [features, setFeatures] = useState([]);
+function ListaCaracteristicas() {
+  const {
+    caracteristicas, agregarCaracteristica, reemplazarCaracteristica, quitarCaracteristica, recargarHoteles,
+  } = useDatos();
+  const { mostrarToast, confirmar } = useAvisos();
+
   const [mostrarModal, setMostrarModal] = useState(false);
   const [editando, setEditando] = useState(null); // null cuando es una nueva
   const [nombre, setNombre] = useState('');
   const [icono, setIcono] = useState('📶');
-
-  useEffect(() => {
-    fetch(`${API_URL}/caracteristicas`)
-      .then((res) => res.json())
-      .then((data) => setFeatures(data))
-      .catch((err) => console.error('Error al cargar características:', err));
-  }, []);
+  const [error, setError] = useState('');
 
   const abrirModal = (feature) => {
     setEditando(feature);
     setNombre(feature ? feature.nombre : '');
     setIcono(feature ? feature.icono : '📶');
+    setError('');
     setMostrarModal(true);
   };
 
-  const guardar = (e) => {
+  const guardar = async (e) => {
     e.preventDefault();
-    const url = editando ? `${API_URL}/caracteristicas/${editando.id}` : `${API_URL}/caracteristicas`;
+    setError('');
 
-    fetch(url, {
-      method: editando ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, icono }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('error al guardar');
-        return res.json();
-      })
-      .then((data) => {
-        setFeatures((prev) => (editando ? prev.map((f) => (f.id === data.id ? data : f)) : [...prev, data]));
-        setMostrarModal(false);
-      })
-      .catch(() => alert('No se pudo guardar la característica.'));
+    const datos = { nombre: nombre.trim(), icono: icono.trim() };
+
+    try {
+      if (editando) {
+        reemplazarCaracteristica(await editarCaracteristica(editando.id, datos));
+        // los hoteles muestran el nombre y el ícono, así que también se vuelven a pedir
+        recargarHoteles();
+        mostrarToast('Característica actualizada correctamente.');
+      } else {
+        agregarCaracteristica(await crearCaracteristica(datos));
+        mostrarToast('Característica creada correctamente.');
+      }
+      setMostrarModal(false);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  const eliminar = (id) => {
-    fetch(`${API_URL}/caracteristicas/${id}`, { method: 'DELETE' })
-      .then(async (res) => {
-        if (!res.ok) throw new Error(await leerError(res, 'No se pudo eliminar la característica.'));
-        setFeatures((prev) => prev.filter((f) => f.id !== id));
-      })
-      .catch((err) => alert(err.message));
+  const eliminar = async (feature) => {
+    const acepto = await confirmar({
+      titulo: '¿Eliminar la característica?',
+      mensaje: `Vas a eliminar "${feature.nombre}". Si algún hotel la tiene asignada no se va a poder eliminar.`,
+      textoConfirmar: 'Eliminar',
+    });
+    if (!acepto) return;
+
+    try {
+      await eliminarCaracteristica(feature.id);
+      quitarCaracteristica(feature.id);
+      mostrarToast('Característica eliminada correctamente.');
+    } catch (err) {
+      mostrarToast(err.message, 'error');
+    }
   };
 
   return (
@@ -71,14 +86,14 @@ function ListaCaracteristicas({ darkMode }) {
           </tr>
         </thead>
         <tbody>
-          {features.map((f) => (
+          {caracteristicas.map((f) => (
             <tr key={f.id}>
               <td>{f.id}</td>
               <td>{f.icono}</td>
               <td>{f.nombre}</td>
               <td className="table-actions">
                 <button className="edit-btn" onClick={() => abrirModal(f)}>Editar</button>
-                <button className="delete-btn" onClick={() => eliminar(f.id)}>Eliminar</button>
+                <button className="delete-btn" onClick={() => eliminar(f)}>Eliminar</button>
               </td>
             </tr>
           ))}
@@ -86,25 +101,26 @@ function ListaCaracteristicas({ darkMode }) {
       </table>
 
       {mostrarModal && (
-        <div className="modal-overlay">
-          <div className={`modal-content ${darkMode ? 'dark-card' : 'light-card'}`}>
-            <h3>{editando ? 'Editar Característica' : 'Añadir Característica'}</h3>
-            <form onSubmit={guardar} className="admin-form">
-              <div className="form-group">
-                <label>Nombre:</label>
-                <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
-              </div>
-              <div className="form-group">
-                <label>Ícono (Emoji):</label>
-                <input type="text" value={icono} onChange={(e) => setIcono(e.target.value)} maxLength={2} required />
-              </div>
-              <div className="modal-buttons">
-                <button type="button" className="btn-cancel" onClick={() => setMostrarModal(false)}>Cancelar</button>
-                <button type="submit" className="btn-submit">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <Modal
+          titulo={editando ? 'Editar Característica' : 'Añadir Característica'}
+          onClose={() => setMostrarModal(false)}
+        >
+          {error && <p className="modal-error">⚠️ {error}</p>}
+          <form onSubmit={guardar} className="admin-form">
+            <div className="form-group">
+              <label>Nombre:</label>
+              <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} maxLength={100} required />
+            </div>
+            <div className="form-group">
+              <label>Ícono (Emoji):</label>
+              <input type="text" value={icono} onChange={(e) => setIcono(e.target.value)} maxLength={10} required />
+            </div>
+            <div className="modal-buttons">
+              <button type="button" className="btn-cancel" onClick={() => setMostrarModal(false)}>Cancelar</button>
+              <button type="submit" className="btn-submit">Guardar</button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );

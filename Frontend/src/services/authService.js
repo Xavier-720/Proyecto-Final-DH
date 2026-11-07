@@ -1,44 +1,45 @@
-import { API_URL } from './api';
+import { request, guardarToken, borrarToken, getToken } from './api';
 
-const AUTH_URL = `${API_URL}/auth`;
+const USER_KEY = 'user';
 
-// hace el post y guarda al usuario en localStorage si sale bien
-const enviarYGuardar = async (ruta, datos, mensajeError) => {
-  let response;
-  try {
-    response = await fetch(`${AUTH_URL}/${ruta}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos),
-    });
-  } catch {
-    throw new Error('No se pudo conectar con el servidor. Probá de nuevo en unos minutos.');
-  }
-
-  if (!response.ok) {
-    throw new Error(mensajeError);
-  }
-
-  const data = await response.json();
-  localStorage.setItem('user', JSON.stringify(data));
-  return data;
+// guarda el token y los datos del usuario (sin contraseña) y devuelve el usuario
+const guardarSesion = (data) => {
+  const { token, ...usuario } = data;
+  guardarToken(token);
+  localStorage.setItem(USER_KEY, JSON.stringify(usuario));
+  return usuario;
 };
 
-export const loginUser = (email, password) =>
-  enviarYGuardar('login', { email, password }, 'Correo o contraseña incorrectos');
+export const loginUser = async (email, password) =>
+  guardarSesion(await request('/auth/login', { method: 'POST', body: { email, password } }));
 
-export const registerUser = (nombre, email, password) =>
-  enviarYGuardar('registro', { nombre, email, password }, 'El correo electrónico ya está registrado');
+export const registerUser = async (nombre, email, password) =>
+  guardarSesion(await request('/auth/registro', { method: 'POST', body: { nombre, email, password } }));
 
 export const logoutUser = () => {
-  localStorage.removeItem('user');
+  borrarToken();
+  localStorage.removeItem(USER_KEY);
 };
 
+// Lee el usuario guardado. Solo se usa para mostrar cosas en pantalla (nombre, botón de admin);
+// los permisos reales los controla el backend con el token.
 export const getStoredUser = () => {
   try {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    const usuario = JSON.parse(localStorage.getItem(USER_KEY));
+    const datosCompletos = usuario
+      && typeof usuario.id === 'number'
+      && typeof usuario.nombre === 'string'
+      && typeof usuario.email === 'string'
+      && ['USER', 'ADMIN'].includes(usuario.rol);
+
+    // si falta algo (o no hay token) se descarta la sesión guardada en vez de romper la pantalla
+    if (!datosCompletos || !getToken()) {
+      logoutUser();
+      return null;
+    }
+    return usuario;
   } catch {
+    logoutUser();
     return null;
   }
 };

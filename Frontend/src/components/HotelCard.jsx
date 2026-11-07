@@ -1,11 +1,25 @@
-const IMAGEN_POR_DEFECTO = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80';
+import { useNavigate } from 'react-router-dom';
+import useFavoritos from '../hooks/useFavoritos';
+import { IMAGEN_POR_DEFECTO } from '../constants/imagenes';
+import './HotelCard.css';
 
-function HotelCard({ hotel, esFavorito, resumen, darkMode, onToggleFavorito, onClick }) {
+function HotelCard({ hotel, resumen }) {
+  const { favoritos, alternarFavorito } = useFavoritos();
+  const navigate = useNavigate();
+
+  const esFavorito = favoritos.includes(hotel.id);
+
+  const handleFavorito = (e) => {
+    // para que el clic no abra también el detalle del hotel
+    e.stopPropagation();
+    alternarFavorito(hotel.id);
+  };
+
   return (
-    <div className={`card ${darkMode ? 'dark-card' : 'light-card'}`} onClick={onClick}>
+    <div className="card tema-card" onClick={() => navigate(`/hoteles/${hotel.id}`)}>
       <button
         className={`favorite-btn ${esFavorito ? 'is-favorite' : ''}`}
-        onClick={(e) => onToggleFavorito(e, hotel.id)}
+        onClick={handleFavorito}
         title={esFavorito ? 'Quitar de favoritos' : 'Guardar en favoritos'}
       >
         {esFavorito ? '❤️' : '🤍'}

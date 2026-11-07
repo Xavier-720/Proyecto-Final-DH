@@ -20,8 +20,7 @@
   transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
-.navbar.light-navbar,
-.navbar.dark-navbar {
+.navbar {
   background-color: #483025;
   border-bottom: 1px solid #634335;
   color: #ffffff;

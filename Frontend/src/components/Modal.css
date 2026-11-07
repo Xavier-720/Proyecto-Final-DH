@@ -28,50 +28,6 @@
   margin-bottom: 1rem;
 }
 
-.admin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  text-align: left;
-}
-
-.form-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea,
-.select-category {
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-  outline: none;
-  background-color: transparent;
-  color: inherit;
-}
-
-.form-group textarea {
-  resize: vertical;
-  height: 80px;
-}
-
-.modal-error {
-  color: #d9534f;
-  background: #ffe6e6;
-  padding: 0.55rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-}
-
 /* aviso que se muestra arriba del login cuando hay que loguearse para reservar */
 .modal-aviso {
   color: #7a4a1d;
@@ -113,4 +69,20 @@
 
 .btn-submit:hover {
   background: #542d13;
+}
+
+.texto-confirmar {
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.modal-buttons.centrado {
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* el título del modal hereda el color del tema (algunos modales se muestran fuera del contenedor principal) */
+.modal-content h3 {
+  color: inherit;
 }

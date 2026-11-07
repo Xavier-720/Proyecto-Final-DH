@@ -1,44 +1,51 @@
 import { useState, useEffect } from 'react';
-import { API_URL, leerError } from '../services/api';
+import useAuth from '../hooks/useAuth';
+import useAvisos from '../hooks/useAvisos';
+import useDatos from '../hooks/useDatos';
+import { listarValoraciones, crearValoracion } from '../services/valoracionService';
+import './Valoraciones.css';
 
 // US#28: puntuar el hotel y ver las reseñas
-function Valoraciones({ hotelId, usuario, onNuevaValoracion }) {
+function Valoraciones({ hotelId }) {
+  const { usuario } = useAuth();
+  const { mostrarToast } = useAvisos();
+  const { recargarResumenes } = useDatos();
+
   const [lista, setLista] = useState([]);
   const [estrellas, setEstrellas] = useState(5);
   const [comentario, setComentario] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
-  const cargar = () => {
-    fetch(`${API_URL}/hoteles/${hotelId}/valoraciones`)
-      .then((res) => res.json())
-      .then((data) => setLista(data))
+  useEffect(() => {
+    listarValoraciones(hotelId)
+      .then(setLista)
       .catch((err) => console.error('Error al cargar valoraciones:', err));
-  };
-
-  useEffect(cargar, [hotelId]);
+  }, [hotelId]);
 
   // el promedio se calcula con todas las valoraciones, asi se actualiza solo
   const promedio = lista.length > 0
     ? (lista.reduce((suma, v) => suma + v.puntuacion, 0) / lista.length).toFixed(1)
     : null;
 
+  // cada usuario puede valorar un hotel una sola vez
+  const yaValoro = usuario && lista.some((v) => v.usuarioId === usuario.id);
+
   const enviar = async () => {
     setMensaje('');
+    setEnviando(true);
 
-    const res = await fetch(`${API_URL}/hoteles/${hotelId}/valoraciones`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usuarioId: usuario.id, puntuacion: estrellas, comentario }),
-    });
-
-    if (!res.ok) {
-      setMensaje(await leerError(res, 'No se pudo guardar la valoración.'));
-      return;
+    try {
+      const nueva = await crearValoracion(hotelId, estrellas, comentario.trim());
+      setLista((prev) => [nueva, ...prev]);
+      setComentario('');
+      recargarResumenes();
+      mostrarToast('¡Gracias por tu opinión!');
+    } catch (err) {
+      setMensaje(err.message);
+    } finally {
+      setEnviando(false);
     }
-
-    setComentario('');
-    cargar();
-    onNuevaValoracion();
   };
 
   return (
@@ -54,7 +61,19 @@ function Valoraciones({ hotelId, usuario, onNuevaValoracion }) {
         </div>
       </div>
 
-      {usuario ? (
+      {!usuario && (
+        <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '1.5rem' }}>
+          <em>Iniciá sesión para poder calificar este alojamiento.</em>
+        </p>
+      )}
+
+      {yaValoro && (
+        <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '1.5rem' }}>
+          <em>Ya dejaste tu opinión sobre este alojamiento. ¡Gracias!</em>
+        </p>
+      )}
+
+      {usuario && !yaValoro && (
         <div className="user-rating-box">
           <h4>Dejanos tu opinión</h4>
           <div className="star-selector">
@@ -73,14 +92,13 @@ function Valoraciones({ hotelId, usuario, onNuevaValoracion }) {
             onChange={(e) => setComentario(e.target.value)}
             placeholder="Contanos cómo fue tu experiencia (opcional)..."
             rows="2"
+            maxLength={1000}
           />
           {mensaje && <p className="modal-error">⚠️ {mensaje}</p>}
-          <button className="btn-submit-rating" onClick={enviar}>Enviar reseña</button>
+          <button className="btn-submit-rating" onClick={enviar} disabled={enviando}>
+            {enviando ? 'Enviando...' : 'Enviar reseña'}
+          </button>
         </div>
-      ) : (
-        <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '1.5rem' }}>
-          <em>Iniciá sesión para poder calificar este alojamiento.</em>
-        </p>
       )}
 
       <div className="reviews-grid">

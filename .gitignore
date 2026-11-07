@@ -27,3 +27,5 @@ Backend/.settings/
 Thumbs.db
 *.suo
 *.user
+# === VARIABLES DE ENTORNO DEL BACKEND ===
+Backend/.env

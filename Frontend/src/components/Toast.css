@@ -1,0 +1,33 @@
+/* avisos que aparecen arriba a la derecha y se van solos */
+.toast-contenedor {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 3000;
+  max-width: min(380px, calc(100vw - 2rem));
+}
+
+.toast {
+  padding: 0.8rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.toast-exito {
+  background: #2e7d4f;
+}
+
+.toast-error {
+  background: #b3382f;
+}
+
+.toast-info {
+  background: #6f3c1b;
+}

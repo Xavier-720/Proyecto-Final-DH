@@ -1,8 +1,9 @@
 package com.reservas.backend.dto;
 
-import lombok.Data;
+import com.reservas.backend.model.Usuario;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-public class RolRequest {
-    private String rol;
-}
+public record RolRequest(
+        @NotNull(message = "El rol es obligatorio (USER o ADMIN)")
+        Usuario.Rol rol
+) {}

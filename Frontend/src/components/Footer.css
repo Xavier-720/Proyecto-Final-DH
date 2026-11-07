@@ -12,7 +12,7 @@
 }
 
 /* Colores para el modo oscuro */
-.dark-footer {
+:where(.dark-mode) .footer {
   background-color: #1a1614;
   border-top: 1px solid #332924;
   color: #f0e6df;
@@ -37,7 +37,7 @@
   color: #2b1810;
 }
 
-.dark-footer .footer-title {
+:where(.dark-mode) .footer .footer-title {
   color: #f0e6df;
 }
 

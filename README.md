@@ -1,174 +1,171 @@
-# 🏨 Anteiku Stay - Sistema de Reservas de Hotel
+# Anteiku Stay · Sistema de reservas de hotel
 
-Aplicación web Full Stack para la búsqueda, gestión y reserva de habitaciones de hotel. Permite a los usuarios explorar hoteles disponibles, filtrar por categorías, gestionar sus reservas y guardar sus lugares favoritos. Incluye un panel de administración para gestionar productos, categorías y usuarios del sistema.
+Aplicación web full stack para buscar hoteles, filtrar por categorías, reservar habitaciones, guardar favoritos y dejar valoraciones. Incluye un panel de administración para gestionar hoteles, categorías, características y usuarios.
 
----
+**[Demo en vivo](https://anteikustay.netlify.app/)** · [Repositorio](https://github.com/Xavier-720/Proyecto-Final-DH)
 
-## ⚙️ Tecnologías
+![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=111)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 
-### 🖥️ Frontend
-- React + Vite
-- CSS3 (un archivo por componente/pantalla)
-- React Router DOM (rutas, rutas protegidas por rol)
-- Context API (sesión, tema, datos compartidos, favoritos, avisos)
+## Contenido
 
-### ☕ Backend
-- Java 17
-- Spring Boot
-- Spring Security + JWT (contraseñas con BCrypt)
-- Spring Validation (`@Valid`)
-- Spring Data JPA
-- MySQL
-- Maven
+- [Características](#características)
+- [Stack](#stack)
+- [Estructura del repositorio](#estructura-del-repositorio)
+- [Requisitos](#requisitos)
+- [Puesta en marcha local](#puesta-en-marcha-local)
+- [API REST](#api-rest)
+- [Rutas del frontend](#rutas-del-frontend)
+- [Tests](#tests)
+- [Migración desde una versión anterior](#migración-desde-una-versión-anterior)
+- [Autores](#autores)
 
----
+## Características
 
-## ☁️ Deploy & Demo en Vivo
+- **Explorar hoteles**: listado, detalle, hoteles aleatorios y filtros por categoría/características.
+- **Reservas**: crear reservas desde el usuario autenticado y consultar las propias.
+- **Favoritos y valoraciones**: guardar hoteles y opinar una vez por usuario y hotel.
+- **Panel de administración**: alta, edición y baja de hoteles, categorías y características; cambio de roles de usuarios.
+- **Autenticación JWT** con contraseñas hasheadas con BCrypt y rutas protegidas por rol.
+- **Contacto directo**: botón de WhatsApp con número general configurable o teléfono propio de cada hotel.
+- **Experiencia cuidada**: tema claro/oscuro, avisos al usuario y despliegue del frontend con fallback de rutas.
 
-- **Frontend:** Desplegado en **Netlify** → [https://anteikustay.netlify.app/](https://anteikustay.netlify.app/)
-- **Backend:** Servidor de pruebas API REST
+## Stack
 
----
+| Capa | Tecnologías |
+| --- | --- |
+| Frontend | React · Vite · React Router DOM · Context API · CSS por componente |
+| Backend | Java 17 · Spring Boot · Spring Security + JWT · Spring Validation · Spring Data JPA |
+| Base de datos | MySQL |
+| Build | Maven (wrapper incluido) y npm |
+| Deploy | Netlify para la SPA · servidor API REST separado |
 
-## 🚀 Instalación local
+## Estructura del repositorio
 
-### 🧩 Requisitos previos
-- Node.js (v18 o superior)
-- Java JDK 17
-- Git
-
-### 📦 Clonar el repositorio
-```bash
-git clone https://github.com/Xavier-720/Proyecto-Final-DH.git
-cd Proyecto-Final-DH
+```text
+Proyecto-Final-DH/
+├── Backend/
+│   ├── .env.example
+│   ├── pom.xml
+│   └── src/main/java/com/reservas/backend/
+│       ├── config/       # SecurityConfig y CORS
+│       ├── controller/   # AUTH, hoteles, reservas, favoritos, valoraciones, admin
+│       ├── dto/          # request/response de la API
+│       ├── exception/    # manejo global de errores
+│       ├── Model/        # entidades JPA
+│       ├── Repository/   # repositorios Spring Data
+│       ├── Service/      # lógica de negocio
+│       └── DataInitializer.java
+├── Frontend/
+│   ├── public/_redirects # fallback de React Router en Netlify
+│   └── src/              # componentes, páginas, contextos y estilos
+└── README.md
 ```
 
----
+## Requisitos
 
-### 📁 Backend (`/Backend`)
+- Node.js 18 o superior.
+- JDK 17 y Maven (se puede usar `./mvnw` incluido).
+- MySQL en ejecución.
+- Git.
 
-1. Navegar a la carpeta del backend:
-   ```bash
-   cd Backend
-   ```
+## Puesta en marcha local
 
-2. Crear el archivo `.env` a partir de `.env.example` (no se sube a Git) y completar los datos:
-   ```env
-   DB_URL=jdbc:mysql://localhost:3306/anteiku_db
-   DB_USERNAME=root
-   DB_PASSWORD=tu_password
-   MAIL_USERNAME=tu_correo@gmail.com
-   MAIL_PASSWORD=contraseña_de_aplicacion_de_gmail
-   JWT_SECRET=<generar con: openssl rand -base64 32>
-   CORS_ALLOWED_ORIGINS=http://localhost:5173
-   FRONTEND_URL=http://localhost:5173
-   ADMIN_EMAIL=admin@correo.com
-   ADMIN_PASSWORD=una_password_segura
-   ```
-   > `JWT_SECRET` es obligatorio. `ADMIN_EMAIL` y `ADMIN_PASSWORD` crean el primer administrador al arrancar
-   > (el rol ya no se asigna por el contenido del correo). Los demás administradores se asignan desde el panel.
-   > En producción las mismas variables se cargan como variables de entorno del servidor.
+### 1. Backend
 
-3. Ejecutar el servidor backend:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-   > El Backend estará disponible en: `http://localhost:8080`
+```bash
+cd Backend
+cp .env.example .env   # en Windows: Copy-Item .env.example .env
+```
 
----
+Completá el `.env`:
 
-### 🖼️ Frontend (`/Frontend`)
+```env
+DB_URL=jdbc:mysql://localhost:3306/anteiku_db
+DB_USERNAME=root
+DB_PASSWORD=tu_password
+MAIL_USERNAME=tu_correo@gmail.com
+MAIL_PASSWORD=contraseña_de_aplicacion_de_gmail
+JWT_SECRET=<generar con: openssl rand -base64 32>
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
+ADMIN_EMAIL=admin@correo.com
+ADMIN_PASSWORD=una_password_segura
+```
 
-1. Navegar a la carpeta del frontend:
-   ```bash
-   cd Frontend
-   ```
+`JWT_SECRET` es obligatorio. `ADMIN_EMAIL` y `ADMIN_PASSWORD` crean el primer administrador al arrancar.
 
-2. Crear el archivo `.env`:
-   ```env
-   VITE_API_URL=http://localhost:8080/api
-   ```
+```bash
+./mvnw spring-boot:run
+```
 
-3. (Opcional) Teléfono general del botón de WhatsApp en el `.env`: `VITE_WHATSAPP_NUMBER=5491123456789`.
-   Si un hotel tiene su propio teléfono (se carga desde el panel) se usa ese.
+API disponible en <http://localhost:8080>.
 
-4. Instalar dependencias e iniciar el servidor de desarrollo:
-   ```bash
-   npm install
-   npm run dev
-   ```
-   > El Frontend estará disponible en: `http://localhost:5173`
+### 2. Frontend
 
----
+En otra terminal:
 
-## 📬 Endpoints (API REST)
+```bash
+cd Frontend
+```
 
-Los endpoints protegidos esperan el header `Authorization: Bearer <token>`.
-Todos los errores responden con el mismo formato: `{ timestamp, status, error, mensaje, errores }`.
+Creá `Frontend/.env`:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+VITE_WHATSAPP_NUMBER=5491123456789   # opcional
+```
+
+Después:
+
+```bash
+npm install
+npm run dev
+```
+
+La SPA queda en <http://localhost:5173>.
+
+## API REST
+
+Los endpoints protegidos esperan `Authorization: Bearer <token>`. Los errores usan el formato `{ timestamp, status, error, mensaje, errores }`.
 
 | Método | Endpoint | Descripción | Auth |
-| :--- | :--- | :--- | :---: |
-| `POST` | `/api/auth/registro` | Registro de usuario (siempre con rol USER) | ❌ |
-| `POST` | `/api/auth/login` | Iniciar sesión y obtener el token JWT | ❌ |
-| `GET` | `/api/hoteles` · `/api/hoteles/aleatorios` · `/api/hoteles/{id}` | Consultar hoteles | ❌ |
-| `POST` `PUT` `DELETE` | `/api/hoteles` · `/api/hoteles/{id}` | Alta, edición y baja de hoteles | ✅ ADMIN |
-| `GET` | `/api/categorias` · `/api/caracteristicas` | Listados | ❌ |
-| `POST` `DELETE` | `/api/categorias` · `/api/categorias/{id}` | Gestión de categorías | ✅ ADMIN |
-| `POST` `PUT` `DELETE` | `/api/caracteristicas` · `/api/caracteristicas/{id}` | Gestión de características | ✅ ADMIN |
-| `GET` | `/api/usuarios` | Listar usuarios | ✅ ADMIN |
-| `PUT` | `/api/usuarios/{id}/rol` | Cambiar el rol de un usuario | ✅ ADMIN |
-| `POST` | `/api/reservas` | Crear una reserva (el usuario sale del token) | ✅ |
-| `GET` | `/api/reservas/mias` | Reservas del usuario logueado | ✅ |
-| `GET` | `/api/reservas` · `/api/hoteles/{id}/reservas` | Fechas ocupadas (sin datos de personas) | ❌ |
-| `GET` | `/api/hoteles/{id}/valoraciones` · `/api/valoraciones/resumen` | Reseñas y promedios | ❌ |
-| `POST` | `/api/hoteles/{id}/valoraciones` | Valorar un hotel (una vez por usuario) | ✅ |
-| `GET` `POST` `DELETE` | `/api/favoritos` · `/api/favoritos/{hotelId}` | Favoritos del usuario logueado | ✅ |
+| --- | --- | --- | :--: |
+| `POST` | `/api/auth/registro` | Registro (siempre rol USER) | No |
+| `POST` | `/api/auth/login` | Login y token JWT | No |
+| `GET` | `/api/hoteles`, `/api/hoteles/aleatorios`, `/api/hoteles/{id}` | Consultar hoteles | No |
+| `POST` `PUT` `DELETE` | `/api/hoteles`, `/api/hoteles/{id}` | ABM de hoteles | ADMIN |
+| `GET` `POST` `DELETE` | `/api/categorias`, `/api/caracteristicas` | ABM de catálogos | ADMIN / pública |
+| `GET` | `/api/usuarios` | Listar usuarios | ADMIN |
+| `PUT` | `/api/usuarios/{id}/rol` | Cambiar rol | ADMIN |
+| `POST` | `/api/reservas` | Crear reserva | Sí |
+| `GET` | `/api/reservas/mias` | Reservas del usuario | Sí |
+| `GET` | `/api/hoteles/{id}/reservas` | Fechas ocupadas | No |
+| `GET` `POST` | `/api/hoteles/{id}/valoraciones` | Reseñas y promedios | Sí / pública |
+| `GET` `POST` `DELETE` | `/api/favoritos`, `/api/favoritos/{hotelId}` | Favoritos | Sí |
 
-### Rutas del frontend
+## Rutas del frontend
 
-`/` · `/hoteles/:id` · `/hoteles/:id/reservar` · `/mis-reservas` · `/favoritos` · `/admin` (`/admin/productos`, `/admin/categorias`, `/admin/caracteristicas`, `/admin/usuarios`).
-Para que funcione al recargar en Netlify se incluye `Frontend/public/_redirects`.
+`/` · `/hoteles/:id` · `/hoteles/:id/reservar` · `/mis-reservas` · `/favoritos` · `/admin` (con `productos`, `categorias`, `caracteristicas`, `usuarios`). El archivo `Frontend/public/_redirects` permite recargar esas rutas en Netlify.
 
---- | :--- | :--- | :---: |
-| `POST` | `/api/auth/register` | Registro de nuevo usuario | ❌ |
-| `POST` | `/api/auth/login` | Iniciar sesión y obtener token JWT | ❌ |
-| `GET` | `/api/hoteles` | Listar todos los hoteles | ❌ |
-| `GET` | `/api/hoteles/{id}` | Obtener detalle de un hotel | ❌ |
-| `POST` | `/api/hoteles` | Crear un nuevo hotel | ✅ (ADMIN) |
-| `DELETE` | `/api/hoteles/{id}` | Eliminar un hotel existente | ✅ (ADMIN) |
-| `GET` | `/api/categorias` | Obtener categorías disponibles | ❌ |
-| `POST` | `/api/reservas` | Realizar una reserva de habitación | ✅ (USER) |
-| `GET` | `/api/reservas/usuario` | Ver historial de reservas del usuario | ✅ (USER) |
+## Tests
 
----
-
-## 🗂️ Diagrama de Entidades (ER)
-
-```plaintext
-[USUARIOS] 1 --- * [RESERVAS] * --- 1 [HOTELES] * --- 1 [CATEGORIAS]
-    |  1                                   | *
-    *                                      * (valoraciones, favoritos, caracteristicas)
-[VALORACIONES / FAVORITOS] * --- 1 [HOTELES] * --- * [CARACTERISTICAS]
-```
-
----
-
-## 🧪 Testing
-
-### Backend
 ```bash
-./mvnw test
+# Backend
+cd Backend && ./mvnw test
+
+# Frontend
+cd Frontend && npm run build   # verificación de compilación
 ```
 
-### Frontend
-Todavía no hay tests automatizados en el frontend.
+El frontend todavía no tiene tests automatizados.
 
----
+## Migración desde una versión anterior
 
-## 🔄 Si venís de la versión anterior de la base de datos
-
-Cambiaron tipos de columnas (fechas de reserva, categoría del hotel, contraseñas con hash), y `ddl-auto=update` no modifica columnas existentes.
-Hay que borrar las tablas viejas una sola vez para que se regeneren y el `DataInitializer` vuelva a cargar los datos de prueba:
+Cambiaron tipos de columnas (fechas, categoría, contraseñas con hash) y `ddl-auto=update` no modifica columnas existentes. Si venís de una base vieja, borrá las tablas una sola vez:
 
 ```sql
 SET FOREIGN_KEY_CHECKS = 0;
@@ -176,17 +173,11 @@ DROP TABLE IF EXISTS favoritos, valoraciones, reservas, hotel_caracteristica, ho
 SET FOREIGN_KEY_CHECKS = 1;
 ```
 
-Además, las credenciales que estaban en el repositorio (base de datos y contraseña de aplicación de Gmail) tienen que **cambiarse**: seguir en el historial de Git las deja expuestas aunque ya no estén en el código.
+Las credenciales que estuvieron en el repositorio en el pasado deben cambiarse: siguen en el historial de Git aunque ya no estén en el código.
 
----
+## Autores
 
-## 👤 Autores
+- **Xavier Cuevas** — [@Xavier-720](https://github.com/Xavier-720)
+- Equipo de desarrollo — Proyecto Integrador, Digital House.
 
-- **Xavier Cuevas** - [@Xavier-720](https://github.com/Xavier-720)
-- Equipo de Desarrollo - Proyecto Integrador Digital House
-
----
-
-## 📄 Licencia
-
-Proyecto desarrollado con fines educativos para el programa de Certified Tech Developer.
+Proyecto desarrollado con fines educativos para el programa Certified Tech Developer.
